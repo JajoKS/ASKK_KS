@@ -1,0 +1,346 @@
+# version: "3.8"
+
+# services:
+#   db:
+#     image: postgres:13.2-alpine
+#     restart: unless-stopped
+#     environment:
+#       POSTGRES_PASSWORD: example
+#     container_name: db_redmine
+
+
+
+# version: "3.8"
+
+# services:
+#   db:
+#     image: postgres:13.2-alpine
+#     restart: unless-stopped
+#     environment:
+#       POSTGRES_PASSWORD: example
+#     container_name: db_redmine
+#     volumes:
+#       - database:/var/lib/postgresql/data
+
+# volumes:
+#   database:
+
+
+# version: "3.8"
+
+# services:
+#   db:
+#     image: postgres:13.2-alpine
+#     restart: unless-stopped
+#     environment:
+#       POSTGRES_PASSWORD: example
+#     container_name: db_redmine
+#     volumes:
+#       - database:/var/lib/postgresql/data
+#   redmine:
+#     image: redmine:5.1-alpine
+#     environment:
+#       - REDMINE_DB_POSTGRES=db
+#       - REDMINE_DB_PASSWORD=example
+#     ports:
+#       - 9999:3000
+#     depends_on:
+#       - db
+# volumes:
+#   database:
+
+
+# version: "3.8"
+
+# services:
+#   db:
+#     image: postgres:13.2-alpine
+#     restart: unless-stopped
+#     environment:
+#       POSTGRES_PASSWORD: example
+#     container_name: db_redmine
+#     volumes:
+#       - database:/var/lib/postgresql/data
+#   redmine:
+#     image: redmine:4.1-alpine
+#     environment:
+#       - REDMINE_DB_POSTGRES=db
+#       - REDMINE_DB_PASSWORD=example
+#     ports:
+#       - 9999:3000
+#     volumes:
+#       - files:/usr/src/redmine/files
+#     depends_on:
+#       - db
+
+# volumes:
+#   database:
+#   files:
+
+
+
+# version: "3.8"
+
+# services:
+#   db:
+#     image: postgres:13.2-alpine
+#     restart: unless-stopped
+#     environment:
+#       POSTGRES_PASSWORD: example
+#     container_name: db_redmine
+#     volumes:
+#       - database:/var/lib/postgresql/data
+#   redmine:
+#     image: redmine:4.1-alpine
+#     environment:
+#       - REDMINE_DB_POSTGRES=db
+#       - REDMINE_DB_PASSWORD=example
+#     ports:
+#       - 9999:3000
+#     volumes:
+#       - files:/usr/src/redmine/files
+#     depends_on:
+#       - db
+#   adminer:
+#     image: adminer:4
+#     restart: always
+#     environment:
+#       - ADMINER_DESIGN=galkaev
+#     ports:
+#       - 8083:8080
+# volumes:
+#   database:
+#   files:
+
+
+# Ex 2.6
+
+# services:
+#   backend:
+#     build:
+#       context: ./example-backend
+#       dockerfile: Dockerfile.backend
+#     container_name: example-backend
+#     ports:
+#       - "8080:8080"
+#     environment:
+#       - PORT=8080
+#       - REQUEST_ORIGIN=http://localhost:5000
+
+#       - REDIS_HOST=redis
+#       - REDIS_PORT=6379
+
+#       - POSTGRES_HOST=postgres
+#       - POSTGRES_PORT=5432
+#       - POSTGRES_USER=postgres
+#       - POSTGRES_PASSWORD=postgres
+#       - POSTGRES_DATABASE=messages
+
+#     depends_on:
+#       - redis
+#       - postgres
+#     restart: unless-stopped
+
+#   frontend:
+#     build:
+#       context: ./example-frontend
+#       dockerfile: Dockerfile.frontend
+#     container_name: example-frontend
+#     ports:
+#       - "5000:5000"
+#     environment:
+#       - REACT_APP_BACKEND_URL=http://localhost:8080
+#     depends_on:
+#       - backend
+
+#   redis:
+#     image: redis:latest
+#     container_name: example-redis
+#     restart: unless-stopped
+
+#   postgres:
+#     image: postgres:15
+#     container_name: example-postgres
+#     environment:
+#       - POSTGRES_USER=postgres
+#       - POSTGRES_PASSWORD=postgres
+#       - POSTGRES_DB=messages
+#     restart: unless-stopped
+
+
+
+# Ex 2.7
+
+# services:
+#   backend:
+#     build:
+#       context: ./example-backend
+#       dockerfile: Dockerfile.backend
+#     container_name: example-backend
+#     ports:
+#       - "8080:8080"
+#     environment:
+#       - PORT=8080
+#       - REQUEST_ORIGIN=http://localhost:5000
+
+#       - REDIS_HOST=redis
+#       - REDIS_PORT=6379
+
+#       - POSTGRES_HOST=postgres
+#       - POSTGRES_PORT=5432
+#       - POSTGRES_USER=postgres
+#       - POSTGRES_PASSWORD=postgres
+#       - POSTGRES_DATABASE=messages
+#     depends_on:
+#       - redis
+#       - postgres
+#     restart: unless-stopped
+
+#   frontend:
+#     build:
+#       context: ./example-frontend
+#       dockerfile: Dockerfile.frontend
+#     container_name: example-frontend
+#     ports:
+#       - "5000:5000"
+#     environment:
+#       - REACT_APP_BACKEND_URL=http://localhost:8080
+#     depends_on:
+#       - backend
+
+#   redis:
+#     image: redis:latest
+#     container_name: example-redis
+#     restart: unless-stopped
+
+#   postgres:
+#     image: postgres:15
+#     container_name: example-postgres
+#     environment:
+#       - POSTGRES_USER=postgres
+#       - POSTGRES_PASSWORD=postgres
+#       - POSTGRES_DB=messages
+#     volumes:
+#       - ./database:/var/lib/postgresql/data
+#     restart: unless-stopped
+
+
+
+# Ex 2.8 i Ex 2.9
+
+# services:
+#   backend:
+#     build:
+#       context: ./example-backend
+#       dockerfile: Dockerfile.backend
+#     container_name: example-backend
+#     environment:
+#       - PORT=8080
+#       - REQUEST_ORIGIN=http://localhost
+
+#       - REDIS_HOST=redis
+#       - REDIS_PORT=6379
+
+#       - POSTGRES_HOST=postgres
+#       - POSTGRES_PORT=5432
+#       - POSTGRES_USER=postgres
+#       - POSTGRES_PASSWORD=postgres
+#       - POSTGRES_DATABASE=messages
+#     depends_on:
+#       - redis
+#       - postgres
+#     restart: unless-stopped
+
+#   frontend:
+#     build:
+#       context: ./example-frontend
+#       dockerfile: Dockerfile.frontend
+#     container_name: example-frontend
+#     environment:
+#       - REACT_APP_BACKEND_URL=/api
+#     depends_on:
+#       - backend
+
+#   redis:
+#     image: redis:latest
+#     container_name: example-redis
+#     restart: unless-stopped
+
+#   postgres:
+#     image: postgres:15
+#     container_name: example-postgres
+#     environment:
+#       - POSTGRES_USER=postgres
+#       - POSTGRES_PASSWORD=postgres
+#       - POSTGRES_DB=messages
+#     volumes:
+#       - ./database:/var/lib/postgresql/data
+#     restart: unless-stopped
+
+#   nginx:
+#     image: nginx:latest
+#     container_name: example-nginx
+#     ports:
+#       - "80:80"
+#     volumes:
+#       - ./nginx.conf:/etc/nginx/nginx.conf:ro
+#     depends_on:
+#       - frontend
+#       - backend
+
+
+# Ex 2.10
+
+services:
+  backend:
+    build:
+      context: ./example-backend
+      dockerfile: Dockerfile.backend
+    environment:
+      - PORT=8080
+      - REQUEST_ORIGIN=http://localhost
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DATABASE=messages
+    depends_on:
+      - redis
+      - postgres
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./example-frontend
+      dockerfile: Dockerfile.frontend
+    environment:
+      - REACT_APP_BACKEND_URL=/api
+    depends_on:
+      - backend
+
+  redis:
+    image: redis:latest
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=messages
+    volumes:
+      - ./database:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - frontend
+      - backend
+

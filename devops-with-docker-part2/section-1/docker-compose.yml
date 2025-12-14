@@ -1,0 +1,61 @@
+# version: '3.8'
+
+# services:
+#   yt-dlp-ubuntu:
+#     image: jajoks/youtube-dl
+#     build: .
+#     volumes:
+#       - .:/mydir
+#     container_name: yt-dlp
+
+# version: "3.8"
+
+# services:
+#   simple-web-service:
+#     image: devopsdockeruh/simple-web-service
+#     volumes:
+#       - ./text.log:/usr/src/app/text.log
+
+
+# version: '3.8'
+
+# services:
+#   whoami:
+#     image: jwilder/whoami
+#     ports:
+#       - 8000:8000
+
+
+# Ex 2.2
+# version: "3.8"
+
+# services:
+#   simple-web-service:
+#     image: devopsdockeruh/simple-web-service
+#     command: server
+#     ports:
+#       - 8000:8080
+
+# Ex 2.3
+version: "3.9"
+
+services:
+  backend:
+    build: ./example-backend
+    container_name: example-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - REQUEST_ORIGIN=http://localhost:5000
+
+  frontend:
+    build:
+      context: ./example-frontend
+      args:
+        - REACT_APP_BACKEND_URL=http://backend:8080
+    container_name: example-frontend
+    ports:
+      - "5000:5000"
+    depends_on:
+      - backend

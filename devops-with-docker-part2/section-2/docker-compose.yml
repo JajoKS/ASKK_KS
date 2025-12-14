@@ -1,0 +1,87 @@
+# Ex 2.4
+# version: "3.8"
+
+# services:
+#   backend:
+#     build:
+#       context: ./example-backend
+#       dockerfile: Dockerfile.backend
+#     container_name: example-backend
+#     ports:
+#       - "8080:8080"
+#     environment:
+#       - PORT=8080
+#       - REQUEST_ORIGIN=http://localhost:5000
+#       - REDIS_HOST=redis
+#       - REDIS_PORT=6379
+#     depends_on:
+#       - redis
+#     restart: unless-stopped
+
+#   frontend:
+#     build:
+#       context: ./example-frontend
+#       dockerfile: Dockerfile.frontend
+#       args:
+#         - REACT_APP_BACKEND_URL=http://backend:8080
+#     container_name: example-frontend
+#     ports:
+#       - "5000:5000"
+#     depends_on:
+#       - backend
+
+#   redis:
+#     image: redis:latest
+#     container_name: example-redis
+#     ports:
+#       - "6379:6379"
+#     restart: unless-stopped
+
+
+# version: '3.8'
+
+# services:
+#   whoami:
+#     image: jwilder/whoami
+#     ports:
+#       - 8000
+
+
+# version: "3.8"
+
+# services:
+#   whoami:
+#     image: jwilder/whoami
+#   proxy:
+#     image: jwilder/nginx-proxy
+#     volumes:
+#       - /var/run/docker.sock:/tmp/docker.sock:ro
+#     ports:
+      # - 80:80
+
+
+version: "3.8"
+
+services:
+  whoami:
+    image: jwilder/whoami
+    environment:
+      - VIRTUAL_HOST=whoami.colasloth.com
+  proxy:
+    image: jwilder/nginx-proxy
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    ports:
+      - 80:80
+  hello:
+    image: nginx:1.19-alpine
+    volumes:
+      - ./hello.html:/usr/share/nginx/html/index.html:ro
+    environment:
+      - VIRTUAL_HOST=hello.colasloth.com
+  world:
+    image: nginx:1.19-alpine
+    volumes:
+      - ./world.html:/usr/share/nginx/html/index.html:ro
+    environment:
+      - VIRTUAL_HOST=world.colasloth.com
