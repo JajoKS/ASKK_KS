@@ -13,11 +13,11 @@
 4. Komenda "docker build -t DOCKERHUB_USERNAME/express-app:latest ." oraz "docker run -p 8080:8080 DOCKERHUB_USERNAME/express-app"
 
 
-5. Komenda
+5. Po zpushowaniu gitem action działa.
 
 
 
-6. Komenda
+6. Został utworzony nowy obraz na dockerhub
 
 
 
