@@ -25,3 +25,4 @@ jobs:
           context: ./devops-with-docker-part3/section-2/material-applications/express-app
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/express-app:latest
+
