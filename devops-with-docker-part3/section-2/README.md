@@ -10,7 +10,7 @@
 
 
 
-4. Komenda "docker build -t jajoks/express-app:latest ." oraz "docker run -p 8080:8080 jajoks/express-app"
+4. Komenda "docker build -t DOCKERHUB_USERNAME/express-app:latest ." oraz "docker run -p 8080:8080 DOCKERHUB_USERNAME/express-app"
 
 
 5. Komenda
