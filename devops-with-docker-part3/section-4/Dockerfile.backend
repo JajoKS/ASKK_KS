@@ -1,0 +1,102 @@
+# # FROM golang:1.16
+
+# # # Instalacja pakietów: sudo, groupadd, useradd, inne zależności i czyszczenie list
+# # RUN apt-get update && apt-get install -y \
+# #     sudo \
+# #     && groupadd -r appgroup && useradd -r -g appgroup appuser \
+# #     && rm -rf /var/lib/apt/lists/*
+
+# # # Ustawiamy katalog roboczy
+# # WORKDIR /app
+
+# # # Kopiujemy wszystkie pliki do katalogu roboczego
+# # COPY . .
+
+# # # Instalujemy zależności i budujemy aplikację
+# # RUN go build
+
+# # # Ustawiamy zmienne środowiskowe
+# # ENV PORT=8080
+# # ENV REQUEST_ORIGIN=http://localhost:5000
+
+# # # Otwieramy port
+# # EXPOSE 8080
+
+# # # Zmieniamy właściciela plików na nowego użytkownika
+# # RUN chown -R appuser:appgroup /app
+
+# # # Przełączamy na nowego użytkownika
+# # USER appuser
+
+# # # Uruchamiamy aplikację
+# # CMD ["./server"]
+
+# #Ex. 3.7
+
+# FROM golang:1.16-alpine
+
+# # Instalacja pakietów do tworzenia użytkownika i czyszczenie
+# RUN apk update && apk add --no-cache \
+#     sudo \
+#     shadow \
+#     && rm -rf /var/cache/apk/*
+
+# # Tworzymy grupę i użytkownika
+# RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+
+# # Ustawiamy katalog roboczy
+# WORKDIR /app
+
+# # Kopiujemy wszystkie pliki do katalogu roboczego
+# COPY . .
+
+# # Instalujemy zależności
+# RUN go build
+
+# # Ustawiamy zmienne środowiskowe
+# ENV PORT=8080
+# ENV REQUEST_ORIGIN=http://localhost:5000
+
+# # Otwieramy port
+# EXPOSE 8080
+
+# # Zmieniamy właściciela plików na nowego użytkownika
+# RUN chown -R appuser:appgroup /app
+
+# # Przełączamy na nowego użytkownika
+# USER appuser
+
+# # Uruchamiamy aplikację
+# CMD ["./server"]
+
+
+# 1st Stage: Build the Go binary
+FROM golang:1.16 as builder
+
+# Ustawiamy katalog roboczy
+WORKDIR /app
+
+# Kopiujemy wszystkie pliki do katalogu roboczego
+COPY . .
+
+# Instalujemy zależności i budujemy aplikację
+RUN go build -o server .
+
+# 2nd Stage: Copy the binary into a minimal image
+FROM scratch
+
+# Ustawiamy katalog roboczy w kontenerze
+WORKDIR /root/
+
+# Kopiujemy z poprzedniego etapu tylko skompilowaną aplikację
+COPY --from=builder /app/server .
+
+# Ustawiamy zmienne środowiskowe
+ENV PORT=8080
+ENV REQUEST_ORIGIN=http://localhost:5000
+
+# Otwieramy port
+EXPOSE 8080
+
+# Uruchamiamy aplikację
+CMD ["./server"]

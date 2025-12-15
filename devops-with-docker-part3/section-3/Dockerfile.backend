@@ -1,0 +1,34 @@
+FROM golang:1.16
+
+# Instalacja pakietów: adduser, addgroup i inne zależności
+RUN apt-get update && apt-get install -y \
+    sudo \
+    && rm -rf /var/lib/apt/lists/*
+
+# Tworzymy grupę i użytkownika
+RUN groupadd -r appgroup && useradd -r -g appgroup appuser
+
+# Ustawiamy katalog roboczy
+WORKDIR /app
+
+# Kopiujemy wszystkie pliki do katalogu roboczego
+COPY . .
+
+# Instalujemy zależności
+RUN go build
+
+# Ustawiamy zmienne środowiskowe
+ENV PORT=8080
+ENV REQUEST_ORIGIN=http://localhost:5000
+
+# Otwieramy port
+EXPOSE 8080
+
+# Zmieniamy właściciela plików na nowego użytkownika
+RUN chown -R appuser:appgroup /app
+
+# Przełączamy na nowego użytkownika
+USER appuser
+
+# Uruchamiamy aplikację
+CMD ["./server"]

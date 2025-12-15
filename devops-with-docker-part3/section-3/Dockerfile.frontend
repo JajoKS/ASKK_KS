@@ -1,0 +1,37 @@
+# Bazowy obraz dla Node.js
+FROM node:16-bullseye
+
+# Instalacja pakietów do tworzenia użytkownika
+RUN apt-get update && apt-get install -y sudo passwd && rm -rf /var/lib/apt/lists/*
+
+# Tworzymy grupę i użytkownika
+RUN groupadd -r appgroup && useradd -r -g appgroup appuser
+
+# Ustawiamy katalog roboczy
+WORKDIR /app
+
+# Kopiujemy pliki package.json i package-lock.json
+COPY package*.json ./
+
+# Instalujemy zależności
+RUN npm install
+
+# Kopiujemy resztę plików aplikacji
+COPY . .
+
+# Ustawiamy zmienne środowiskowe
+ENV HOST=0.0.0.0
+ENV PORT=5000
+ENV REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL
+
+# Otwieramy port
+EXPOSE 5000
+
+# Zmieniamy właściciela plików na nowego użytkownika
+RUN chown -R appuser:appgroup /app && chmod -R 755 /app
+
+# Przełączamy na nowego użytkownika
+USER appuser
+
+# Uruchamiamy aplikację
+CMD ["npm", "start"]
