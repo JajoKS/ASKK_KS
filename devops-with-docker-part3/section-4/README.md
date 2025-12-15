@@ -78,6 +78,6 @@
 
 ![alt text](https://github.com/JajoKS/ASKK_KS/blob/main/devops-with-docker-part3/section-4/Images/20.png)
 
-21. Coś natomiast nie wyszło z backendem, ponieważ ma dalej taki sam rozmiar
+21. Komenda "docker images backend". Jest prawie 25 MB
 
-![alt text](https://github.com/JajoKS/ASKK_KS/blob/main/devops-with-docker-part3/section-4/Images/021.png)
+![alt text](https://github.com/JajoKS/ASKK_KS/blob/main/devops-with-docker-part3/section-4/Images/21.png)
