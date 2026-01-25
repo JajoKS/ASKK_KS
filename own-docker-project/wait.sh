@@ -1,5 +1,4 @@
 #!/bin/bash
-# Czekanie aż host i port będą OK
 
 host="$1"
 shift

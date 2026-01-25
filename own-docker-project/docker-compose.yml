@@ -10,18 +10,17 @@ services:
       - DB_NAME=postgres
       - DB_USER=postgres
       - DB_PASS=superhaslo
-    # Użycie skryptu wait przed startem pythona
+    # uzycie skryptu wait przed startem pythona
     command: ./wait.sh db python app.py
     depends_on:
       - db
 
-  # PostgreSQL
+  # postgreSQL
   db:
     image: postgres:13
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=superhaslo
-    # Wolumen: Dane trwale zapisane w folderze 'postgres_data'
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
