@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Docker To-Do List</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            border: 2px solid #0000FF;
+            padding: 20px;
+            width: 400px;
+            text-align: center;
+            box-shadow: 0 0 15px #0000FF;
+        }
+        h1 { 
+            color: #0000FF; 
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+        }
+        ul { 
+            list-style-type: none;
+            padding: 0; 
+            counter-reset: item-counter;
+        }
+
+        li { 
+            margin-bottom: 15px; 
+            display: flex; 
+            align-items: center;
+            counter-increment: item-counter;
+        }
+        
+        li::before {
+            content: counter(item-counter) ". ";
+            color: #0000FF;
+            font-weight: bold;
+            width: 30px;
+            text-align: right;
+            margin-right: 10px;
+        }
+
+        textarea {
+            background: #111;
+            border: none;
+            border-bottom: 1px solid #333;
+            color: white;
+            font-family: monospace;
+            padding: 8px;
+            flex-grow: 1;
+            resize: none; /* Użytkownik nie może ręcznie rozciągać okienka */
+            overflow: hidden; /* Ukrywamy pasek przewijania */
+            min-height: 20px;
+            line-height: 1.4;
+            transition: border-bottom 0.3s;
+            word-wrap: break-word; /* Zawijanie długich słów */
+        }
+
+        textarea:focus { 
+            outline: none; 
+            border-bottom: 1px solid #0000FF; 
+            background: #1a1a1a;
+        }
+
+        button { cursor: pointer; border: none; font-weight: bold; }
+        .add-btn {
+            background-color: #0000FF;
+            color: white;
+            font-size: 24px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-top: 10px;
+        }
+        .delete-btn {
+            background-color: red;
+            color: white;
+            margin-left: 10px;
+            padding: 2px 6px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>TODO LIST</h1>
+    <ul id="todo-list">
+        </ul>
+    <button class="add-btn" onclick="addNewTodo()">+</button>
+</div>
+
+<script>
+    window.onload = loadTodos;
+
+    async function loadTodos() {
+        const response = await fetch('/todos');
+        const todos = await response.json();
+        const list = document.getElementById('todo-list');
+        list.innerHTML = '';
+        todos.forEach(todo => appendTodoToDom(todo.id, todo.text));
+    }
+
+    function appendTodoToDom(id, text) {
+        const list = document.getElementById('todo-list');
+        const li = document.createElement('li');
+        li.id = 'todo-' + id;
+
+        const input = document.createElement('textarea');
+        input.value = text;
+        input.placeholder = "Wpisz zadanie...";
+        input.rows = 1;
+
+        const autoResize = (el) => {
+            el.style.height = 'auto';
+            el.style.height = el.scrollHeight + 'px';
+        };
+
+        setTimeout(() => autoResize(input), 0);
+        
+        input.oninput = () => autoResize(input);
+        input.onblur = () => updateTodo(id, input.value);
+
+        const delBtn = document.createElement('button');
+        delBtn.innerText = 'X';
+        delBtn.className = 'delete-btn';
+        delBtn.onclick = () => deleteTodo(id);
+
+        li.appendChild(input);
+        li.appendChild(delBtn);
+        list.appendChild(li);
+    }
+
+    async function addNewTodo() {
+        const response = await fetch('/todos', { method: 'POST' });
+        const newTodo = await response.json();
+        appendTodoToDom(newTodo.id, newTodo.text);
+    }
+
+    async function updateTodo(id, text) {
+        await fetch('/todos/' + id, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: text })
+        });
+    }
+
+    async function deleteTodo(id) {
+        await fetch('/todos/' + id, { method: 'DELETE' });
+        document.getElementById('todo-' + id).remove();
+    }
+</script>
+
+</body>
+</html>
